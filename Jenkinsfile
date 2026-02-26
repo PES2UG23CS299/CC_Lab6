@@ -16,11 +16,11 @@ pipeline {
             }
         }
         stage('Deploy NGINX Load Balancer') {
-            steps {
-                // Task 4: Run NGINX and mount the local configuration
-                sh 'docker rm -f nginx-lb || true'
-                sh "docker run -d --name nginx-lb -p 80:80 -v \$(pwd)/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro nginx"
-            }
+    steps {
+        sh 'docker rm -f nginx-lb || true'
+        // Using ${WORKSPACE} ensures the path is absolute and correct for the Jenkins container
+        sh "docker run -d --name nginx-lb -p 80:80 -v ${WORKSPACE}/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro nginx"
         }
     }
 }
+
