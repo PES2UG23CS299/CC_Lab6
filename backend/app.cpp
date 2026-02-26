@@ -23,13 +23,14 @@ int main() {
         int new_socket = accept(server_fd, NULL, NULL);
         if (new_socket < 0) continue;
 
-        // Proper HTTP response format
         std::string hostname = getenv("HOSTNAME") ? getenv("HOSTNAME") : "unknown";
         std::string body = "Served by backend: " + hostname + "\n";
+        
+        // Corrected: use std::to_string instead of std::to_stdio
         std::string response = 
             "HTTP/1.1 200 OK\r\n"
             "Content-Type: text/plain\r\n"
-            "Content-Length: " + std::to_stdio(body.length()) + "\r\n"
+            "Content-Length: " + std::to_string(body.length()) + "\r\n"
             "Connection: close\r\n"
             "\r\n" + body;
 
