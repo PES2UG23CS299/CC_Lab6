@@ -14,11 +14,13 @@ pipeline {
             }
         }
         stage('Deploy NGINX Load Balancer') {
-            steps {
-                sh 'docker rm -f nginx-lb || true'
-                sh "docker run -d --name nginx-lb -p 80:80 -v ${WORKSPACE}/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro nginx"
-            }
+    steps {
+        sh 'docker rm -f nginx-lb-final || true'
+        // We add a ':' at the end of the host path to hint it's a file, 
+        // and change the container name to 'nginx-lb-final'
+        sh "docker run -d --name nginx-lb-final -p 80:80 -v ${WORKSPACE}/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro nginx"
         }
     }
 }
+
 
