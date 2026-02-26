@@ -3,22 +3,23 @@ pipeline {
     stages {
         stage('Build Backend Image') {
             steps {
-                // Ensure the path matches your repo structure
-                sh 'docker build -t backend-app backend' [cite: 367, 611]
+                // Task 2: Build the backend application image
+                sh 'docker build -t backend-app backend'
             }
         }
         stage('Deploy Backends') {
             steps {
-                sh 'docker rm -f backend1 backend2 || true' [cite: 405, 624]
-                sh 'docker run -d --name backend1 backend-app' [cite: 407, 625]
-                sh 'docker run -d --name backend2 backend-app' [cite: 410]
+                // Task 3: Deploy two backend instances for load balancing
+                sh 'docker rm -f backend1 backend2 || true'
+                sh 'docker run -d --name backend1 backend-app'
+                sh 'docker run -d --name backend2 backend-app'
             }
         }
-        stage('Deploy NGINX') {
+        stage('Deploy NGINX Load Balancer') {
             steps {
-                sh 'docker rm -f nginx-lb || true' [cite: 543, 630]
-                // Note: The path below assumes Jenkins workspace structure
-                sh "docker run -d --name nginx-lb -p 80:80 -v \$(pwd)/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro nginx" [cite: 546, 634]
+                // Task 4: Run NGINX and mount the local configuration
+                sh 'docker rm -f nginx-lb || true'
+                sh "docker run -d --name nginx-lb -p 80:80 -v \$(pwd)/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro nginx"
             }
         }
     }
